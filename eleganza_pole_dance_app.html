@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ELEGAN'ZA — Pole Dance Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --gold:#C9A96E;--gold-light:#E8D5A3;--gold-dark:#8B6914;
+    --black:#0A0A0A;--off-black:#111;--dark:#1A1A1A;--mid:#2A2A2A;
+    --gray:#3A3A3A;--light-gray:#888;--pale:#F5F0E8;--white:#FDFAF5;
+    --pink:#C4687A;--pink-light:#F2D0D6;--success:#4A8C6A;--danger:#B84040;
+    --font-display:'Cormorant Garamond',serif;--font-body:'Montserrat',sans-serif;
+    --radius:4px;--radius-lg:8px;
+  }
+  body{font-family:var(--font-body);background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
+  
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,169,110,0.15);padding:0 2rem}
+  .nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:var(--font-display);font-size:1.6rem;font-weight:300;letter-spacing:0.12em;color:var(--gold);font-style:italic}
+  .logo span{font-style:normal;font-weight:600}
+  .nav-links{display:flex;gap:2rem;align-items:center}
+  .nav-links button{background:none;border:none;color:var(--light-gray);font-family:var(--font-body);font-size:0.72rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;padding:6px 0;transition:color 0.2s;border-bottom:1px solid transparent}
+  .nav-links button:hover,.nav-links button.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .nav-btn-admin{background:var(--gold)!important;color:var(--black)!important;padding:6px 16px!important;border-radius:var(--radius)!important;border:none!important}
+  .nav-btn-admin:hover{background:var(--gold-light)!important}
+  
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 60% 40%, rgba(201,169,110,0.06) 0%, transparent 60%), linear-gradient(160deg, #0A0A0A 0%, #141414 50%, #0A0A0A 100%)}
+  .hero-bg{position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);background-size:30px 30px}
+  .hero-content{text-align:center;z-index:1;padding:0 2rem}
+  .hero-eyebrow{font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;font-weight:500}
+  .hero-title{font-family:var(--font-display);font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.05;letter-spacing:0.04em;margin-bottom:0.3rem}
+  .hero-title em{font-style:italic;color:var(--gold)}
+  .hero-subtitle{font-family:var(--font-display);font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:300;color:var(--light-gray);margin-bottom:2.5rem;letter-spacing:0.08em}
+  .hero-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 2.5rem}
+  .hero-desc{font-size:0.82rem;letter-spacing:0.1em;color:var(--light-gray);max-width:420px;margin:0 auto 3rem;line-height:1.8;font-weight:300}
+  .btn-primary{background:var(--gold);color:var(--black);border:none;padding:14px 40px;font-family:var(--font-body);font-size:0.72rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all 0.25s}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:13px 40px;font-family:var(--font-body);font-size:0.72rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all 0.25s}
+  .btn-outline:hover{background:rgba(201,169,110,0.08)}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+  /* PAGES */
+  .page{display:none;padding-top:80px;min-height:100vh}
+  .page.active{display:block}
+  .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+  .section-header{text-align:center;padding:4rem 0 3rem}
+  .section-eyebrow{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:500}
+  .section-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:0.04em}
+  .section-title em{font-style:italic;color:var(--gold)}
+  .divider-thin{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem auto}
+
+  /* CLASES */
+  .profesores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:3rem}
+  .profesor-card{background:var(--dark);border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius-lg);padding:1.5rem;cursor:pointer;transition:all 0.25s}
+  .profesor-card:hover,.profesor-card.selected{border-color:var(--gold);background:rgba(201,169,110,0.05)}
+  .profesor-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg, var(--gold-dark), var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.6rem;font-weight:300;color:var(--black);margin-bottom:1rem}
+  .profesor-name{font-family:var(--font-display);font-size:1.1rem;font-weight:400;margin-bottom:0.3rem}
+  .profesor-spec{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .profesor-rating{font-size:0.75rem;color:var(--light-gray);margin-top:0.4rem}
+
+  /* CALENDAR */
+  .booking-layout{display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start}
+  .calendar-panel{background:var(--dark);border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius-lg);padding:1.5rem}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+  .cal-month{font-family:var(--font-display);font-size:1.3rem;font-weight:400;letter-spacing:0.06em}
+  .cal-nav{background:none;border:1px solid rgba(201,169,110,0.3);color:var(--gold);width:32px;height:32px;border-radius:var(--radius);cursor:pointer;font-size:1rem;transition:all 0.2s}
+  .cal-nav:hover{background:rgba(201,169,110,0.1)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-day-name{text-align:center;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--light-gray);padding:6px 0;font-weight:500}
+  .cal-day{text-align:center;padding:8px 4px;border-radius:var(--radius);cursor:pointer;font-size:0.78rem;font-weight:400;transition:all 0.2s;min-height:36px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px}
+  .cal-day.empty{cursor:default}
+  .cal-day.past{color:var(--gray);cursor:default}
+  .cal-day.has-slots{color:var(--white)}
+  .cal-day.has-slots::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);display:block}
+  .cal-day.selected{background:var(--gold);color:var(--black)!important;font-weight:600}
+  .cal-day.selected::after{background:var(--black)}
+  .cal-day.has-slots:hover:not(.selected){background:rgba(201,169,110,0.12)}
+
+  /* SLOTS */
+  .slots-panel{background:var(--dark);border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius-lg);padding:1.5rem}
+  .slots-title{font-family:var(--font-display);font-size:1.1rem;font-weight:400;margin-bottom:1rem;color:var(--gold)}
+  .slot-item{border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:space-between}
+  .slot-item:hover{border-color:var(--gold);background:rgba(201,169,110,0.05)}
+  .slot-item.selected{border-color:var(--gold);background:rgba(201,169,110,0.08)}
+  .slot-item.booked{opacity:0.4;cursor:not-allowed;border-style:dashed}
+  .slot-time{font-weight:600;font-size:0.82rem;letter-spacing:0.06em}
+  .slot-info{font-size:0.7rem;color:var(--light-gray);margin-top:2px}
+  .slot-price{font-family:var(--font-display);font-size:1rem;color:var(--gold);font-weight:400}
+  .slot-badge{font-size:0.6rem;padding:3px 8px;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600}
+  .badge-available{background:rgba(74,140,106,0.15);color:#6DBFA0;border:1px solid rgba(74,140,106,0.3)}
+  .badge-full{background:rgba(184,64,64,0.15);color:#D98080;border:1px solid rgba(184,64,64,0.3)}
+
+  /* BOOKING FORM */
+  .booking-form{background:var(--dark);border:1px solid rgba(201,169,110,0.2);border-radius:var(--radius-lg);padding:1.5rem;margin-top:1.5rem}
+  .form-title{font-family:var(--font-display);font-size:1.2rem;font-weight:400;margin-bottom:1.2rem;color:var(--gold)}
+  .form-group{margin-bottom:1rem}
+  .form-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light-gray);font-weight:500;display:block;margin-bottom:6px}
+  .form-input{width:100%;background:var(--mid);border:1px solid rgba(201,169,110,0.2);border-radius:var(--radius);padding:10px 12px;color:var(--white);font-family:var(--font-body);font-size:0.82rem;transition:border-color 0.2s;outline:none}
+  .form-input:focus{border-color:var(--gold)}
+  .form-input::placeholder{color:var(--gray)}
+  .booking-summary{background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius);padding:1rem;margin:1rem 0}
+  .summary-row{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px}
+  .summary-row:last-child{margin-bottom:0;font-weight:600;font-family:var(--font-display);font-size:0.95rem;border-top:1px solid rgba(201,169,110,0.15);padding-top:8px;margin-top:4px}
+  .summary-label{color:var(--light-gray)}
+  .summary-value{color:var(--white)}
+  .summary-value.gold{color:var(--gold)}
+
+  /* MIS CLASES */
+  .mis-clases-grid{display:grid;gap:1rem;margin-top:2rem}
+  .clase-card{background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .clase-info{flex:1}
+  .clase-curso{font-family:var(--font-display);font-size:1rem;font-weight:400;margin-bottom:0.25rem}
+  .clase-meta{font-size:0.72rem;color:var(--light-gray);display:flex;gap:1rem;flex-wrap:wrap}
+  .clase-status{font-size:0.65rem;padding:4px 10px;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+  .status-confirmed{background:rgba(74,140,106,0.15);color:#6DBFA0;border:1px solid rgba(74,140,106,0.3)}
+  .status-cancelled{background:rgba(184,64,64,0.15);color:#D98080;border:1px solid rgba(184,64,64,0.3)}
+  .btn-cancel{background:none;border:1px solid rgba(184,64,64,0.3);color:#D98080;padding:7px 14px;border-radius:var(--radius);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);font-weight:600;transition:all 0.2s;white-space:nowrap}
+  .btn-cancel:hover{background:rgba(184,64,64,0.1);border-color:#D98080}
+  .btn-sm{padding:8px 18px;font-size:0.68rem}
+
+  /* NOTIFICACIONES */
+  .notif-container{position:fixed;top:80px;right:1.5rem;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none;width:340px}
+  .notif{background:var(--mid);border:1px solid rgba(201,169,110,0.2);border-radius:var(--radius-lg);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;animation:slideIn 0.35s ease;pointer-events:all;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+  .notif.success{border-color:rgba(74,140,106,0.4);background:rgba(26,40,30,0.95)}
+  .notif.warning{border-color:rgba(184,64,64,0.4);background:rgba(40,20,20,0.95)}
+  .notif-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+  .notif.success .notif-icon{background:rgba(74,140,106,0.2);color:#6DBFA0}
+  .notif.warning .notif-icon{background:rgba(184,64,64,0.2);color:#D98080}
+  .notif-body{flex:1}
+  .notif-title{font-size:0.78rem;font-weight:600;margin-bottom:3px;letter-spacing:0.04em}
+  .notif.success .notif-title{color:#6DBFA0}
+  .notif.warning .notif-title{color:#D98080}
+  .notif-msg{font-size:0.72rem;color:var(--light-gray);line-height:1.5}
+  .notif-close{background:none;border:none;color:var(--gray);cursor:pointer;font-size:1rem;line-height:1;flex-shrink:0}
+  @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes fadeOut{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
+  .notif.closing{animation:fadeOut 0.3s ease forwards}
+
+  /* ADMIN DASHBOARD */
+  .admin-lock{text-align:center;padding:4rem 2rem;max-width:360px;margin:0 auto}
+  .admin-lock-icon{font-size:2.5rem;margin-bottom:1.5rem;opacity:0.4}
+  .admin-lock h2{font-family:var(--font-display);font-size:1.8rem;font-weight:300;margin-bottom:0.75rem;letter-spacing:0.04em}
+  .admin-lock p{font-size:0.78rem;color:var(--light-gray);margin-bottom:2rem;line-height:1.7}
+  .metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+  .metric-card{background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);padding:1.5rem}
+  .metric-label{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--light-gray);margin-bottom:0.6rem;font-weight:500}
+  .metric-value{font-family:var(--font-display);font-size:2rem;font-weight:300;color:var(--white);line-height:1}
+  .metric-sub{font-size:0.7rem;color:var(--light-gray);margin-top:0.4rem}
+  .metric-value.gold{color:var(--gold)}
+  .metric-value.green{color:#6DBFA0}
+  .metric-value.red{color:#D98080}
+  .chart-bar-container{background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:2rem}
+  .chart-title{font-family:var(--font-display);font-size:1rem;font-weight:400;margin-bottom:1.5rem;color:var(--gold);letter-spacing:0.04em}
+  .bar-chart{display:flex;gap:8px;align-items:flex-end;height:140px}
+  .bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .bar-wrap{flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+  .bar{border-radius:3px 3px 0 0;width:100%;min-height:4px;transition:height 0.4s ease}
+  .bar.income{background:linear-gradient(180deg,var(--gold),var(--gold-dark))}
+  .bar.cost{background:rgba(184,64,64,0.5)}
+  .bar-label{font-size:0.6rem;color:var(--light-gray);letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
+  .bar-val{font-size:0.62rem;color:var(--light-gray)}
+  .legend{display:flex;gap:1.5rem;margin-bottom:1rem}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--light-gray);letter-spacing:0.08em;text-transform:uppercase}
+  .legend-dot{width:10px;height:10px;border-radius:2px}
+  .courses-table{background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);overflow:hidden}
+  .table-header{background:rgba(201,169,110,0.06);padding:1rem 1.5rem;border-bottom:1px solid rgba(201,169,110,0.1)}
+  .table-header h3{font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--gold);letter-spacing:0.04em}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--light-gray);font-weight:600;padding:10px 1.5rem;text-align:left;border-bottom:1px solid rgba(201,169,110,0.08)}
+  td{font-size:0.78rem;padding:12px 1.5rem;border-bottom:1px solid rgba(201,169,110,0.05);color:var(--white)}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(201,169,110,0.03)}
+  .td-profit.pos{color:#6DBFA0}
+  .td-profit.neg{color:#D98080}
+  .empty-state{text-align:center;padding:3rem;color:var(--light-gray)}
+  .empty-state p{font-family:var(--font-display);font-size:1.4rem;font-weight:300;color:var(--gray);margin-top:0.75rem}
+
+  /* TOAST overlay */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:150;align-items:center;justify-content:center}
+  .overlay.open{display:flex}
+  .modal{background:var(--dark);border:1px solid rgba(201,169,110,0.25);border-radius:var(--radius-lg);padding:2rem;max-width:420px;width:90%;text-align:center}
+  .modal h3{font-family:var(--font-display);font-size:1.6rem;font-weight:300;margin-bottom:0.75rem}
+  .modal p{font-size:0.78rem;color:var(--light-gray);line-height:1.7;margin-bottom:1.5rem}
+  .modal-btns{display:flex;gap:0.75rem;justify-content:center}
+  .btn-danger{background:var(--danger);color:var(--white);border:none;padding:10px 24px;border-radius:var(--radius);font-family:var(--font-body);font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+  .btn-danger:hover{background:#C04444}
+  .tab-bar{display:flex;gap:0;margin-bottom:2rem;border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius);overflow:hidden}
+  .tab{flex:1;padding:10px;background:none;border:none;color:var(--light-gray);font-family:var(--font-body);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+  .tab.active{background:rgba(201,169,110,0.1);color:var(--gold)}
+  .tab:hover:not(.active){background:rgba(255,255,255,0.03)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Elegan<span>'za</span></div>
+    <div class="nav-links">
+      <button class="active" onclick="showPage('home',this)">Inicio</button>
+      <button onclick="showPage('clases',this)">Clases</button>
+      <button onclick="showPage('reservas',this)">Reservar</button>
+      <button onclick="showPage('mis-clases',this)">Mis Clases</button>
+      <button class="nav-btn-admin" onclick="showPage('admin',this)">Panel Admin</button>
+    </div>
+  </div>
+</nav>
+
+<!-- NOTIFICACIONES -->
+<div class="notif-container" id="notifContainer"></div>
+
+<!-- MODAL CANCELAR -->
+<div class="overlay" id="cancelModal">
+  <div class="modal">
+    <h3>Cancelar Clase</h3>
+    <p>¿Estás segura de que deseas cancelar esta clase? Se notificará a todos los estudiantes inscritos.</p>
+    <div class="modal-btns">
+      <button class="btn-outline btn-sm" onclick="closeCancelModal()">Volver</button>
+      <button class="btn-danger" onclick="confirmCancel()">Sí, Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== PÁGINAS ======================== -->
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Studio Premium · Santiago, Chile</div>
+      <h1 class="hero-title">Elegan<em>'za</em><br>Pole Dance</h1>
+      <p class="hero-subtitle">Arte · Fuerza · Elegancia</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">Descubre el poder de tu cuerpo a través del pole dance. Clases personalizadas con instructoras certificadas para todos los niveles.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('reservas',document.querySelectorAll('.nav-links button')[2])">Reservar Clase</button>
+        <button class="btn-outline" onclick="showPage('clases',document.querySelectorAll('.nav-links button')[1])">Ver Programas</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CLASES -->
+<div id="page-clases" class="page">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Nuestros Programas</div>
+      <h2 class="section-title">Clases <em>diseñadas</em> para ti</h2>
+      <div class="divider-thin"></div>
+    </div>
+    <div class="profesores-grid" id="profesoresGrid"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2rem">
+      <div style="background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);padding:2rem">
+        <div class="section-eyebrow" style="text-align:left;margin-bottom:0.75rem">Principiante</div>
+        <h3 style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;margin-bottom:0.75rem">Pole Intro</h3>
+        <p style="font-size:0.78rem;color:var(--light-gray);line-height:1.8;margin-bottom:1rem">Aprende la base técnica del pole dance: seguridad, agarre, giros básicos y postura.</p>
+        <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);margin-bottom:1rem">$18.000 <span style="font-size:0.8rem;color:var(--light-gray)">/ clase</span></div>
+        <button class="btn-primary btn-sm" onclick="showPage('reservas',document.querySelectorAll('.nav-links button')[2])">Reservar</button>
+      </div>
+      <div style="background:var(--dark);border:1px solid rgba(201,169,110,0.15);border-radius:var(--radius-lg);padding:2rem">
+        <div class="section-eyebrow" style="text-align:left;margin-bottom:0.75rem">Intermedio</div>
+        <h3 style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;margin-bottom:0.75rem">Pole Flow</h3>
+        <p style="font-size:0.78rem;color:var(--light-gray);line-height:1.8;margin-bottom:1rem">Combina técnica y fluidez. Aprende movimientos en el aire, transiciones y coreografías.</p>
+        <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);margin-bottom:1rem">$22.000 <span style="font-size:0.8rem;color:var(--light-gray)">/ clase</span></div>
+        <button class="btn-primary btn-sm" onclick="showPage('reservas',document.querySelectorAll('.nav-links button')[2])">Reservar</button>
+      </div>
+      <div style="background:var(--dark);border:1px solid rgba(201,169,110,0.12);border-radius:var(--radius-lg);padding:2rem">
+        <div class="section-eyebrow" style="text-align:left;margin-bottom:0.75rem">Avanzado</div>
+        <h3 style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;margin-bottom:0.75rem">Pole Art</h3>
+        <p style="font-size:0.78rem;color:var(--light-gray);line-height:1.8;margin-bottom:1rem">Alto rendimiento y expresión artística. Trucos avanzados, inversiones y performance.</p>
+        <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);margin-bottom:1rem">$26.000 <span style="font-size:0.8rem;color:var(--light-gray)">/ clase</span></div>
+        <button class="btn-primary btn-sm" onclick="showPage('reservas',document.querySelectorAll('.nav-links button')[2])">Reservar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVAR -->
+<div id="page-reservas" class="page">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Sistema de Reservas</div>
+      <h2 class="section-title">Elige tu <em>clase perfecta</em></h2>
+      <div class="divider-thin"></div>
+    </div>
+    <!-- Step 1: Profesor -->
+    <div style="margin-bottom:2rem">
+      <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:600">Paso 1 — Elige tu instructora</div>
+      <div class="profesores-grid" id="profesoresGridReserva"></div>
+    </div>
+    <!-- Step 2/3: Calendario + Slots -->
+    <div id="bookingStep2" style="display:none">
+      <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:600">Paso 2 — Selecciona fecha y hora</div>
+      <div class="booking-layout">
+        <div>
+          <div class="calendar-panel">
+            <div class="cal-header">
+              <button class="cal-nav" id="calPrev" onclick="changeMonth(-1)">‹</button>
+              <span class="cal-month" id="calMonthLabel"></span>
+              <button class="cal-nav" id="calNext" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div>
+          <div class="slots-panel" id="slotsPanel">
+            <div class="slots-title" id="slotsTitle">Selecciona un día</div>
+            <div id="slotsList"><div class="empty-state" style="padding:2rem 0"><p style="font-size:1rem">↑ Elige una fecha disponible</p></div></div>
+          </div>
+          <div class="booking-form" id="bookingForm" style="display:none">
+            <div class="form-title">Paso 3 — Confirmar reserva</div>
+            <div class="form-group">
+              <label class="form-label">Nombre completo</label>
+              <input class="form-input" type="text" id="inputNombre" placeholder="Ej: María González" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Correo electrónico</label>
+              <input class="form-input" type="email" id="inputEmail" placeholder="tu@correo.cl" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Teléfono</label>
+              <input class="form-input" type="tel" id="inputTel" placeholder="+56 9 xxxx xxxx" />
+            </div>
+            <div class="booking-summary" id="bookingSummary"></div>
+            <button class="btn-primary" style="width:100%;margin-top:0.5rem" onclick="confirmarReserva()">Confirmar Reserva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MIS CLASES -->
+<div id="page-mis-clases" class="page">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Tu agenda</div>
+      <h2 class="section-title">Mis <em>Clases</em></h2>
+      <div class="divider-thin"></div>
+    </div>
+    <div class="mis-clases-grid" id="misClasesGrid"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Panel Administrativo</div>
+      <h2 class="section-title">Dashboard <em>Financiero</em></h2>
+      <div class="divider-thin"></div>
+    </div>
+    <div id="adminLock">
+      <div class="admin-lock">
+        <div class="admin-lock-icon">🔐</div>
+        <h2>Acceso Restringido</h2>
+        <p>Este panel es solo para el equipo de Elegan'za. Ingresa la contraseña para continuar.</p>
+        <div class="form-group">
+          <input class="form-input" type="password" id="adminPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')checkAdmin()" />
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:0.5rem" onclick="checkAdmin()">Ingresar</button>
+        <p style="font-size:0.7rem;color:var(--gray);margin-top:1rem">Demo: usa "admin123"</p>
+      </div>
+    </div>
+    <div id="adminDash" style="display:none">
+      <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;align-items:center;justify-content:space-between">
+        <div class="tab-bar" style="margin-bottom:0">
+          <button class="tab active" onclick="adminTab('resumen',this)">Resumen</button>
+          <button class="tab" onclick="adminTab('clases',this)">Clases</button>
+          <button class="tab" onclick="adminTab('reservas',this)">Reservas</button>
+        </div>
+        <button class="btn-danger" style="font-size:0.68rem;padding:8px 16px" onclick="simulateCancelAdmin()">⚠ Simular Cancelación de Clase</button>
+      </div>
+      <div id="adminTabResumen">
+        <div class="metrics-grid">
+          <div class="metric-card"><div class="metric-label">Ingresos del mes</div><div class="metric-value gold" id="metIngresos">$0</div><div class="metric-sub" id="metIngSub">0 clases pagadas</div></div>
+          <div class="metric-card"><div class="metric-label">Costos operativos</div><div class="metric-value red" id="metCostos">$0</div><div class="metric-sub">Arriendo + salarios</div></div>
+          <div class="metric-card"><div class="metric-label">Utilidad neta</div><div class="metric-value green" id="metUtilidad">$0</div><div class="metric-sub" id="metUtiSub">margen 0%</div></div>
+          <div class="metric-card"><div class="metric-label">Reservas activas</div><div class="metric-value" id="metReservas">0</div><div class="metric-sub">este mes</div></div>
+        </div>
+        <div class="chart-bar-container">
+          <div class="chart-title">Ingresos vs Costos — Últimos 6 meses</div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Ingresos</div>
+            <div class="legend-item"><div class="legend-dot" style="background:rgba(184,64,64,0.5)"></div>Costos</div>
+          </div>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+      </div>
+      <div id="adminTabClases" style="display:none">
+        <div class="courses-table">
+          <div class="table-header"><h3>Rendimiento por Curso</h3></div>
+          <table>
+            <thead><tr><th>Curso</th><th>Nivel</th><th>Instructora</th><th>Alumnos/mes</th><th>Precio</th><th>Ingresos</th><th>Costo</th><th>Utilidad</th></tr></thead>
+            <tbody id="cursosTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="adminTabReservas" style="display:none">
+        <div class="courses-table">
+          <div class="table-header"><h3>Historial de Reservas</h3></div>
+          <table>
+            <thead><tr><th>Estudiante</th><th>Clase</th><th>Fecha</th><th>Instructora</th><th>Estado</th><th>Monto</th></tr></thead>
+            <tbody id="reservasTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROFESORES=[
+  {id:1,nombre:"Benjamin Fuentes",spec:"Pole Art & Stripers",rating:"4.9 ★  |  128 clases",inicial:"VR",cursos:["Pole Intro","Pole Art"]},
+  {id:2,nombre:"Camila Torres",spec:"Pole Flow & Exotic",rating:"4.8 ★  |  94 clases",inicial:"CT",cursos:["Pole Flow","Pole Intro"]},
+  {id:3,nombre:"Daniela Muñoz",spec:"Pole Fitness & Acrobático",rating:"5.0 ★  |  76 clases",inicial:"DM",cursos:["Pole Flow","Pole Art"]},
+  {id:4,nombre:"Sofía Vega",spec:"Pole Intro & Flexibility",rating:"4.7 ★  |  52 clases",inicial:"SV",cursos:["Pole Intro"]}
+];
+
+const CURSOS=[
+  {nombre:"Pole Intro",nivel:"Principiante",precio:18000,costo:8000},
+  {nombre:"Pole Flow",nivel:"Intermedio",precio:22000,costo:10000},
+  {nombre:"Pole Art",nivel:"Avanzado",precio:26000,costo:12000}
+];
+
+const HORARIOS=["08:00","09:30","11:00","14:00","15:30","17:00","18:30","20:00"];
+let calYear=2026,calMonth=4;
+let selectedProfesor=null,selectedDate=null,selectedSlot=null;
+let reservas=JSON.parse(localStorage.getItem('eleganza_reservas')||'[]');
+let pendingCancelId=null;
+
+function fmt(n){return n.toLocaleString('es-CL',{style:'currency',currency:'CLP',minimumFractionDigits:0})}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelector('#page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(id==='clases')renderProfesoresGrid('profesoresGrid',false);
+  if(id==='reservas')renderProfesoresGrid('profesoresGridReserva',true);
+  if(id==='mis-clases')renderMisClases();
+}
+
+function renderProfesoresGrid(elId,selectable){
+  const el=document.getElementById(elId);
+  el.innerHTML=PROFESORES.map(p=>`
+    <div class="profesor-card${selectable&&selectedProfesor&&selectedProfesor.id===p.id?' selected':''}" onclick="${selectable?`selectProfesor(${p.id})`:''}">
+      <div class="profesor-avatar">${p.inicial}</div>
+      <div class="profesor-name">${p.nombre}</div>
+      <div class="profesor-spec">${p.spec}</div>
+      <div class="profesor-rating">${p.rating}</div>
+      ${selectable?'':'<div style="font-size:0.7rem;color:var(--light-gray);margin-top:0.5rem">'+p.cursos.join(' · ')+'</div>'}
+    </div>`).join('');
+}
+
+function selectProfesor(id){
+  selectedProfesor=PROFESORES.find(p=>p.id===id);
+  selectedDate=null;selectedSlot=null;
+  renderProfesoresGrid('profesoresGridReserva',true);
+  document.getElementById('bookingStep2').style.display='block';
+  document.getElementById('bookingForm').style.display='none';
+  document.getElementById('slotsList').innerHTML='<div class="empty-state" style="padding:2rem 0"><p style="font-size:1rem">↑ Elige una fecha disponible</p></div>';
+  document.getElementById('slotsTitle').textContent='Selecciona un día';
+  renderCalendar();
+}
+
+const MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const DIAS=["Do","Lu","Ma","Mi","Ju","Vi","Sá"];
+
+function changeMonth(d){calMonth+=d;if(calMonth>11){calMonth=0;calYear++}if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
+
+function renderCalendar(){
+  document.getElementById('calMonthLabel').textContent=`${MESES[calMonth]} ${calYear}`;
+  const grid=document.getElementById('calGrid');
+  const today=new Date(2026,4,21);
+  const first=new Date(calYear,calMonth,1);
+  const startDay=first.getDay();
+  const daysIn=new Date(calYear,calMonth+1,0).getDate();
+  let html=DIAS.map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  for(let i=0;i<startDay;i++)html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=daysIn;d++){
+    const dt=new Date(calYear,calMonth,d);
+    const past=dt<today;
+    const hasSlots=!past&&(d%3!==0);
+    const sel=selectedDate&&selectedDate.getDate()===d&&selectedDate.getMonth()===calMonth;
+    let cls='cal-day';
+    if(past)cls+=' past';
+    else if(hasSlots)cls+=' has-slots';
+    if(sel)cls+=' selected';
+    const click=(hasSlots&&!past)?`onclick="selectDate(${d})"`:'' ;
+    html+=`<div class="${cls}" ${click}>${d}</div>`;
+  }
+  grid.innerHTML=html;
+}
+
+function selectDate(d){
+  selectedDate=new Date(calYear,calMonth,d);
+  selectedSlot=null;
+  document.getElementById('bookingForm').style.display='none';
+  renderCalendar();
+  renderSlots();
+}
+
+function renderSlots(){
+  const dateStr=selectedDate.toLocaleDateString('es-CL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('slotsTitle').textContent=dateStr;
+  const rng=new Math.seedrandom?new Math.seedrandom(selectedDate+selectedProfesor.id):null;
+  const seed=(selectedDate.getDate()*7+selectedProfesor.id*13)%17;
+  const slots=HORARIOS.map((h,i)=>{
+    const curso=CURSOS[i%CURSOS.length];
+    const booked=(i+seed)%5===0;
+    return{hora:h,curso:curso.nombre,precio:curso.precio,booked};
+  });
+  document.getElementById('slotsList').innerHTML=slots.map((s,i)=>`
+    <div class="slot-item${s.booked?' booked':''}" onclick="${!s.booked?`selectSlot(${i})`:''}">
+      <div>
+        <div class="slot-time">${s.hora}</div>
+        <div class="slot-info">${s.curso} · ${selectedProfesor.nombre.split(' ')[0]}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="slot-price">${fmt(s.precio)}</div>
+        <div class="slot-badge ${s.booked?'badge-full':'badge-available'}">${s.booked?'Lleno':'Disponible'}</div>
+      </div>
+    </div>`).join('');
+  (window._slots=slots);
+}
+
+function selectSlot(i){
+  const slot=window._slots[i];
+  selectedSlot=slot;
+  document.querySelectorAll('.slot-item').forEach((el,idx)=>{el.classList.toggle('selected',idx===i)});
+  document.getElementById('bookingForm').style.display='block';
+  const dateStr=selectedDate.toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('bookingSummary').innerHTML=`
+    <div class="summary-row"><span class="summary-label">Clase</span><span class="summary-value">${slot.curso}</span></div>
+    <div class="summary-row"><span class="summary-label">Instructora</span><span class="summary-value">${selectedProfesor.nombre}</span></div>
+    <div class="summary-row"><span class="summary-label">Fecha</span><span class="summary-value">${dateStr}</span></div>
+    <div class="summary-row"><span class="summary-label">Hora</span><span class="summary-value">${slot.hora}</span></div>
+    <div class="summary-row"><span class="summary-label">Total</span><span class="summary-value gold">${fmt(slot.precio)}</span></div>`;
+  document.getElementById('bookingForm').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function confirmarReserva(){
+  const nombre=document.getElementById('inputNombre').value.trim();
+  const email=document.getElementById('inputEmail').value.trim();
+  const tel=document.getElementById('inputTel').value.trim();
+  if(!nombre||!email){showNotif('warning','Campos requeridos','Por favor completa nombre y correo.'); return;}
+  if(!selectedSlot||!selectedDate||!selectedProfesor){showNotif('warning','Selección incompleta','Elige una hora antes de confirmar.'); return;}
+  const dateStr=selectedDate.toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+  const id=Date.now();
+  const nueva={id,nombre,email,tel,curso:selectedSlot.curso,precio:selectedSlot.precio,hora:selectedSlot.hora,fecha:dateStr,profesora:selectedProfesor.nombre,estado:'confirmada'};
+  reservas.unshift(nueva);
+  localStorage.setItem('eleganza_reservas',JSON.stringify(reservas));
+  showNotif('success','¡Reserva Confirmada! 🎉',`Tu clase de ${nueva.curso} el ${nueva.fecha} a las ${nueva.hora} está agendada.`);
+  document.getElementById('inputNombre').value='';
+  document.getElementById('inputEmail').value='';
+  document.getElementById('inputTel').value='';
+  document.getElementById('bookingForm').style.display='none';
+  selectedSlot=null;
+  setTimeout(()=>showPage('mis-clases',document.querySelectorAll('.nav-links button')[3]),1200);
+}
+
+function renderMisClases(){
+  const el=document.getElementById('misClasesGrid');
+  if(!reservas.length){el.innerHTML='<div class="empty-state"><div style="font-size:2.5rem;opacity:0.3">📋</div><p>Aún no tienes clases reservadas</p><button class="btn-outline btn-sm" style="margin-top:1.5rem" onclick="showPage(\'reservas\',document.querySelectorAll(\'.nav-links button\')[2])">Reservar mi primera clase</button></div>';return;}
+  el.innerHTML=reservas.map(r=>`
+    <div class="clase-card">
+      <div class="clase-info">
+        <div class="clase-curso">${r.curso}</div>
+        <div class="clase-meta">
+          <span>📅 ${r.fecha}</span><span>🕐 ${r.hora}</span>
+          <span>👤 ${r.profesora.split(' ')[0]}</span>
+          <span style="color:var(--gold)">💰 ${fmt(r.precio)}</span>
+        </div>
+        ${r.nombre?`<div style="font-size:0.7rem;color:var(--light-gray);margin-top:4px">${r.nombre} · ${r.email}</div>`:''}
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <span class="clase-status status-${r.estado}">${r.estado==='confirmada'?'Confirmada':'Cancelada'}</span>
+        ${r.estado==='confirmada'?`<button class="btn-cancel" onclick="openCancelModal(${r.id})">Cancelar</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function openCancelModal(id){pendingCancelId=id;document.getElementById('cancelModal').classList.add('open')}
+function closeCancelModal(){pendingCancelId=null;document.getElementById('cancelModal').classList.remove('open')}
+
+function confirmCancel(){
+  if(!pendingCancelId)return;
+  const r=reservas.find(x=>x.id===pendingCancelId);
+  if(r){
+    r.estado='cancelada';
+    localStorage.setItem('eleganza_reservas',JSON.stringify(reservas));
+    closeCancelModal();
+    renderMisClases();
+    showNotif('warning','Clase Cancelada',`Se notificó a ${r.nombre||'la estudiante'} la cancelación de ${r.curso} del ${r.fecha}.`);
+    setTimeout(()=>showNotif('warning','Notificación Enviada',`Correo enviado a ${r.email||'la estudiante'}. El reembolso se procesará en 3-5 días hábiles.`),1200);
+  }
+}
+
+function simulateCancelAdmin(){
+  const activas=reservas.filter(r=>r.estado==='confirmada');
+  if(!activas.length){showNotif('warning','Sin clases activas','No hay clases confirmadas para cancelar.');return;}
+  const r=activas[0];
+  r.estado='cancelada';
+  localStorage.setItem('eleganza_reservas',JSON.stringify(reservas));
+  updateAdminDash();
+  showNotif('warning','Cancelación Simulada',`Clase de ${r.curso} cancelada. Notificación enviada a ${r.nombre||'estudiante'}.`);
+  setTimeout(()=>showNotif('warning','Notificación en tiempo real',`${r.nombre||'Estudiante'} fue notificada por correo y SMS de la cancelación.`),1200);
+}
+
+/* NOTIF */
+function showNotif(type,title,msg){
+  const c=document.getElementById('notifContainer');
+  const el=document.createElement('div');
+  el.className=`notif ${type}`;
+  const icon=type==='success'?'✓':'✕';
+  el.innerHTML=`<div class="notif-icon">${icon}</div><div class="notif-body"><div class="notif-title">${title}</div><div class="notif-msg">${msg}</div></div><button class="notif-close" onclick="closeNotif(this)">×</button>`;
+  c.appendChild(el);
+  setTimeout(()=>closeNotif(el.querySelector('.notif-close')),5000);
+}
+function closeNotif(btn){
+  const notif=btn.closest('.notif');
+  notif.classList.add('closing');
+  setTimeout(()=>notif.remove(),300);
+}
+
+/* ADMIN */
+function checkAdmin(){
+  const pass=document.getElementById('adminPass').value;
+  if(pass==='admin123'){
+    document.getElementById('adminLock').style.display='none';
+    document.getElementById('adminDash').style.display='block';
+    updateAdminDash();
+  } else {
+    showNotif('warning','Contraseña incorrecta','Intenta nuevamente.');
+  }
+}
+
+function adminTab(tab,btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('adminTabResumen').style.display=tab==='resumen'?'block':'none';
+  document.getElementById('adminTabClases').style.display=tab==='clases'?'block':'none';
+  document.getElementById('adminTabReservas').style.display=tab==='reservas'?'block':'none';
+  if(tab==='clases')renderCursosTable();
+  if(tab==='reservas')renderReservasTable();
+}
+
+function updateAdminDash(){
+  const confirmadas=reservas.filter(r=>r.estado==='confirmada');
+  const ingresos=confirmadas.reduce((s,r)=>s+r.precio,0);
+  const costos=780000+(confirmadas.length*4000);
+  const utilidad=ingresos-costos;
+  document.getElementById('metIngresos').textContent=fmt(ingresos);
+  document.getElementById('metIngSub').textContent=`${confirmadas.length} clases pagadas`;
+  document.getElementById('metCostos').textContent=fmt(costos);
+  document.getElementById('metUtilidad').textContent=fmt(utilidad);
+  document.getElementById('metUtilidad').className='metric-value '+(utilidad>=0?'green':'red');
+  const margen=ingresos>0?Math.round(utilidad/ingresos*100):0;
+  document.getElementById('metUtiSub').textContent=`margen ${margen}%`;
+  document.getElementById('metReservas').textContent=confirmadas.length;
+  renderBarChart(ingresos,costos);
+}
+
+function renderBarChart(ingresosActual,costosActual){
+  const meses=['Dic','Ene','Feb','Mar','Abr','May'];
+  const baseIng=[420000,510000,480000,620000,590000,ingresosActual];
+  const baseCst=[380000,390000,400000,410000,415000,costosActual];
+  const maxV=Math.max(...baseIng,...baseCst);
+  const chart=document.getElementById('barChart');
+  chart.innerHTML=meses.map((m,i)=>{
+    const ih=Math.round((baseIng[i]/maxV)*130);
+    const ch=Math.round((baseCst[i]/maxV)*130);
+    return`<div class="bar-group">
+      <div class="bar-wrap">
+        <div class="bar income" style="height:${ih}px"></div>
+        <div class="bar cost" style="height:${ch}px"></div>
+      </div>
+      <div class="bar-label">${m}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCursosTable(){
+  const tbody=document.getElementById('cursosTableBody');
+  const rows=CURSOS.map(c=>{
+    const prof=PROFESORES.filter(p=>p.cursos.includes(c.nombre));
+    const alumnos=reservas.filter(r=>r.curso===c.nombre&&r.estado==='confirmada').length;
+    const ing=alumnos*c.precio;
+    const cst=alumnos*c.costo+(prof.length*120000);
+    const util=ing-cst;
+    return`<tr><td>${c.nombre}</td><td><span style="font-size:0.65rem;padding:3px 8px;background:rgba(201,169,110,0.1);color:var(--gold);border-radius:2px;letter-spacing:0.06em">${c.nivel}</span></td><td>${prof.map(p=>p.nombre.split(' ')[0]).join(', ')}</td><td>${alumnos}</td><td>${fmt(c.precio)}</td><td>${fmt(ing)}</td><td>${fmt(cst)}</td><td class="td-profit ${util>=0?'pos':'neg'}">${fmt(util)}</td></tr>`;
+  });
+  tbody.innerHTML=rows.join('')||'<tr><td colspan="8" style="text-align:center;color:var(--gray)">Sin datos</td></tr>';
+}
+
+function renderReservasTable(){
+  const tbody=document.getElementById('reservasTableBody');
+  if(!reservas.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray)">Sin reservas aún</td></tr>';return;}
+  tbody.innerHTML=reservas.slice(0,20).map(r=>`<tr>
+    <td>${r.nombre||'—'}</td>
+    <td>${r.curso}</td>
+    <td>${r.fecha} ${r.hora}</td>
+    <td>${r.profesora?r.profesora.split(' ')[0]:'—'}</td>
+    <td><span class="clase-status status-${r.estado}">${r.estado}</span></td>
+    <td style="color:var(--gold)">${fmt(r.precio)}</td>
+  </tr>`).join('');
+}
+
+// Seed reservas demo
+if(!reservas.length){
+  reservas=[
+    {id:1,nombre:"María González",email:"maria@gmail.com",tel:"+56912345678",curso:"Pole Intro",precio:18000,hora:"09:30",fecha:"22 de mayo de 2026",profesora:"Valentina Rojas",estado:"confirmada"},
+    {id:2,nombre:"Fernanda López",email:"fernanda@gmail.com",tel:"+56987654321",curso:"Pole Flow",precio:22000,hora:"15:30",fecha:"23 de mayo de 2026",profesora:"Camila Torres",estado:"confirmada"},
+    {id:3,nombre:"Daniela Pérez",email:"daniela@gmail.com",tel:"+56911111111",curso:"Pole Art",precio:26000,hora:"17:00",fecha:"24 de mayo de 2026",profesora:"Daniela Muñoz",estado:"cancelada"}
+  ];
+  localStorage.setItem('eleganza_reservas',JSON.stringify(reservas));
+}
+
+renderCalendar();
+renderProfesoresGrid('profesoresGrid',false);
+</script>
+</body>
+</html>
